@@ -6,4 +6,6 @@ import com.marktine.assessment.models.response.ServerQuestionResponse;
 public interface HumanVerificationService {
 
     ServerQuestionResponse initiate(ClientRequest request);
+
+    ServerQuestionResponse verify(ClientRequest request);
 }

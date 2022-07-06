@@ -7,6 +7,9 @@ import com.marktine.assessment.service.HumanVerificationService;
 import com.marktine.assessment.utils.RandomUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.Arrays;
 
 @Service
 public class HumanVerificationServiceImpl implements HumanVerificationService {
@@ -17,6 +20,11 @@ public class HumanVerificationServiceImpl implements HumanVerificationService {
     @Value("${sum.question}")
     private String initiateQueryResponse;
 
+    @Value("${sum.answer.correct}")
+    private String correctMsg;
+
+    @Value("${sum.answer.wrong}")
+    private String incorrectMsg;
 
 
     public ServerQuestionResponse initiate(ClientRequest request) {
@@ -40,7 +48,17 @@ public class HumanVerificationServiceImpl implements HumanVerificationService {
 
     public ServerQuestionResponse verify(ClientRequest request) {
 
-       //TODO pending bcz of strict timeline
-        return null;
+        String[] answers = request.getData().split("answer");
+        String[] numbers = answers[0].split(",");
+        int sum = Arrays.stream(numbers)
+                .map(num -> num.replaceAll("[^0-9]", ""))
+                .filter(StringUtils::hasLength)
+                .mapToInt(Integer::parseInt)
+                .sum();
+        String enteredAnswer = answers[1].replaceAll("[^0-9]", "");
+        if(sum == Integer.parseInt(enteredAnswer))
+           return ServerQuestionResponse.builder().data(correctMsg).build();
+        return ServerQuestionResponse.builder().data(incorrectMsg).build();
+
     }
 }

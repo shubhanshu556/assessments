@@ -23,5 +23,11 @@ public class HumanVerificationController {
                 .body(new ServiceResult<>(verificationService.initiate(request)));
     }
 
+    @PostMapping("/verify")
+    public ResponseEntity<?> verify(@Valid @RequestBody ClientRequest request) {
+        return ResponseEntity.status(200)
+                .body(new ServiceResult<>(verificationService.verify(request)));
+    }
+
 
 }
