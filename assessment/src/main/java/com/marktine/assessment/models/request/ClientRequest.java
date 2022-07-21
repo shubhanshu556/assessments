@@ -6,11 +6,12 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
-@AllArgsConstructor
-@NoArgsConstructor
+
 @Data
 public class ClientRequest {
 
     @NotBlank(message="data cannot be null or empty")
     private String data;
+
+    private String identifier;
 }
